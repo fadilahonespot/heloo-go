@@ -44,11 +44,13 @@ func NewServer() (*echo.Echo, *gorm.DB, error) {
 		AllowHeaders: []string{"Content-Type", "Authorization"},
 	}))
 
-	e.GET("/items", itemHandler.List)
-	e.GET("/items/:id", itemHandler.Get)
-	e.POST("/items", itemHandler.Create)
-	e.PUT("/items", itemHandler.Update)
-	e.DELETE("/items", itemHandler.Delete)
+	// Prefixed routes for Netlify (/api/*)
+	api := e.Group("/api")
+	api.GET("/items", itemHandler.List)
+	api.GET("/items/:id", itemHandler.Get)
+	api.POST("/items", itemHandler.Create)
+	api.PUT("/items", itemHandler.Update)
+	api.DELETE("/items", itemHandler.Delete)
 
 	log.Println("server initialized")
 	return e, db, nil
